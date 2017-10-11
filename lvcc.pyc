@@ -1,0 +1,24 @@
+import urllib2
+from bs4 import BeautifulSoup
+
+lvcoc_url = "http://web.lehighvalleychamber.org/allcategories"
+page = urllib2.urlopen(lvcoc_url)
+soup = BeautifulSoup(page)
+prettypage = soup.prettify
+
+categories = open('categorylinks.txt', 'w')
+url = "http://web.lehighvalleychamber.org"
+
+
+cat_left = soup.find_all('div', class_='halfWidth left')
+links_left = cat_left[0].find_all("a")
+links_list = []
+
+for links1 in links_left:
+	lasturlpart = links1.get("href")
+	links_list.append(url + lasturlpart)
+
+with open('links.csv', 'wb') as csvfile:
+	writer= csv.writer(csvfile)
+	for links2 in links_list:
+		writer.writerow([links2])
